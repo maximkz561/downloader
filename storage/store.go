@@ -12,7 +12,7 @@ import (
 
 type Store struct {
 	db             *mongo.Client
-	fileRepository *FileRepository
+	FileRepository *FileRepository
 }
 
 func New() (*Store, error) {
@@ -33,22 +33,24 @@ func New() (*Store, error) {
 		return nil, err
 	}
 
-	return &Store{
+	store := &Store{
 		db: client,
-	}, nil
+	}
+	store.createFileRepository()
+	return store, nil
 }
 
-func (s *Store) File() *FileRepository {
-	if s.fileRepository != nil {
-		return s.fileRepository
+func (s *Store) createFileRepository() *FileRepository {
+	if s.FileRepository != nil {
+		return s.FileRepository
 	}
 	config_ := config.GetConfig()
 	collection := s.db.Database(config_.Mongo.DbName).Collection("files")
 
-	s.fileRepository = &FileRepository{
+	s.FileRepository = &FileRepository{
 		store:      s,
 		collection: collection,
 	}
 
-	return s.fileRepository
+	return s.FileRepository
 }

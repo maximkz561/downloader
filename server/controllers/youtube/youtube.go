@@ -1,7 +1,6 @@
 package youtubeController
 
 import (
-	"downloader/utils"
 	"downloader/youtube"
 	"github.com/gin-gonic/gin"
 	"path/filepath"
@@ -27,28 +26,6 @@ func GetYoutubeVideoFilesInfo(c *gin.Context) {
 
 	c.JSON(200, video)
 
-}
-
-func Download(c *gin.Context) {
-	params := c.Request.URL.Query()
-	fileId := params.Get("file_id")
-	if fileId == "" {
-		c.JSON(422, gin.H{"success": "false", "error": "link param is required"})
-		return
-	}
-	formatId := params.Get("format_id")
-	if formatId == "" {
-		c.JSON(422, gin.H{"success": "false", "error": "link param is required"})
-		return
-	}
-
-	filename, err := youtube.DownloadFile(fileId, formatId)
-	if err != nil {
-		utils.Logger.Error()
-		return
-	}
-
-	c.JSON(200, gin.H{"success": "true", "filename": filename})
 }
 
 func GetDownloadedFile(c *gin.Context) {
