@@ -13,7 +13,7 @@ func (s *Server) DownloadFile() gin.HandlerFunc {
 		FileId string `form:"file_id" binding:"required"`
 	}
 
-	return func (c *gin.Context) {
+	return func(c *gin.Context) {
 
 		req := &request{}
 		if err := c.BindQuery(req); err != nil {
@@ -22,8 +22,9 @@ func (s *Server) DownloadFile() gin.HandlerFunc {
 		}
 
 		objectId, err := primitive.ObjectIDFromHex(req.FileId)
-		if err != nil{
+		if err != nil {
 			c.JSON(400, gin.H{"success": false, "error": "wrong file_id"})
+			return
 		}
 
 		DOWNLOADS_PATH := "./"
@@ -43,7 +44,6 @@ func (s *Server) DownloadFile() gin.HandlerFunc {
 			c.JSON(202, gin.H{"success": true, "message": "file not ready"})
 			return
 		}
-
 
 		targetPath := filepath.Join(DOWNLOADS_PATH, file.FileName)
 		c.FileAttachment(targetPath, file.Title)

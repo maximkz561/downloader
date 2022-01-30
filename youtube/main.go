@@ -27,7 +27,7 @@ func NewVideo(link string) (*Video, error) {
 
 func (v *Video) CollectInfo() error {
 	var files []File
-	stdout, stderr, err := utils.Shellout(fmt.Sprintf("yt-dlp -j %s", v.Id))
+	stdout, stderr, err := utils.Shellout(fmt.Sprintf("yt-dlp -j -- %s", v.Id))
 
 	if err != nil {
 		utils.Logger.Error(err, stderr)

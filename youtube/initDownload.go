@@ -11,7 +11,7 @@ import (
 
 func DownloadFile(store *storage.Store, fileId, formatId string) (*storage.File, error) {
 	var files []File
-	stdout, stderr, err := utils.Shellout(fmt.Sprintf("yt-dlp -j %s", fileId))
+	stdout, stderr, err := utils.Shellout(fmt.Sprintf("yt-dlp -j -- %s", fileId))
 
 	if err != nil {
 		utils.Logger.Error(err, stderr)

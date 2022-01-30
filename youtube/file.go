@@ -31,9 +31,10 @@ type YoutubeFile interface {
 }
 
 func Download(file YoutubeFile, videoId string, title string) (string, error) {
-	_, stderr, err := utils.Shellout(fmt.Sprintf("yt-dlp -f %s %s -o '%s'", file.getFormatId(), videoId, title))
+	_, stderr, err := utils.Shellout(fmt.Sprintf("yt-dlp -o '%s' -f %s -- %s ", title, file.getFormatId(), videoId))
 
 	if err != nil {
+		utils.Logger.Error(stderr)
 		return stderr, err
 	}
 	utils.Logger.Infoln(fmt.Sprintf("File %s %s stars downloading", file.getFormatId(), videoId))
