@@ -1,6 +1,7 @@
 package server
 
 import (
+	"downloader/config"
 	"downloader/utils"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -27,8 +28,6 @@ func (s *Server) DownloadFile() gin.HandlerFunc {
 			return
 		}
 
-		DOWNLOADS_PATH := "./"
-
 		file, err := s.store.FileRepository.Find(objectId)
 		if err != nil {
 			utils.Logger.Error(err)
@@ -45,8 +44,9 @@ func (s *Server) DownloadFile() gin.HandlerFunc {
 			return
 		}
 
-		targetPath := filepath.Join(DOWNLOADS_PATH, file.FileName)
-		c.FileAttachment(targetPath, file.Title)
+		filesPath := config.GetConfig().App.FilesPath
+		targetPath := filepath.Join(filesPath, file.FileName)
+		c.FileAttachment(targetPath, file.FileName)
 
 	}
 }

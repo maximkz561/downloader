@@ -6,8 +6,9 @@ import (
 )
 
 type App struct {
-	Port     string `default:"8000"`
-	LogLevel string
+	Port      string `default:"8000"`
+	LogLevel  string
+	FilesPath string `default:"./files"`
 }
 
 type Mongo struct {

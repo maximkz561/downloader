@@ -6,12 +6,13 @@ import (
 	"fmt"
 	"github.com/tidwall/gjson"
 	"net/url"
+	"strings"
 )
 
 type Video struct {
-	Id    string
-	Title string
-	Files []File
+	Id    string `json:"id"`
+	Title string `json:"title"`
+	Files []File `json:"files"`
 }
 
 func NewVideo(link string) (*Video, error) {
@@ -21,7 +22,12 @@ func NewVideo(link string) (*Video, error) {
 	}
 
 	urlQuery := videoUrl.Query()
+	// if link like https://www.youtube.com/watch?v=KJFUEN7fnds
 	videoID := urlQuery.Get("v")
+	if videoID == "" {
+		// if link like https://youtu.be/KJFUEN7fnds
+		videoID = strings.TrimPrefix(videoUrl.Path, "/")
+	}
 	return &Video{Id: videoID, Files: []File{}}, nil
 }
 

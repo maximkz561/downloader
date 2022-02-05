@@ -6,6 +6,7 @@ import (
 	"downloader/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
 )
 
 type Server struct {
@@ -14,6 +15,7 @@ type Server struct {
 }
 
 func RunServer() {
+	log.SetReportCaller(true)
 	conf := config.GetConfig()
 	store, err := storage.New()
 	if err != nil {

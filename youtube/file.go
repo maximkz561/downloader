@@ -1,8 +1,10 @@
 package youtube
 
 import (
+	"downloader/config"
 	"downloader/utils"
 	"fmt"
+	"path/filepath"
 )
 
 type File struct {
@@ -30,8 +32,12 @@ type YoutubeFile interface {
 	getFormatId() string
 }
 
-func Download(file YoutubeFile, videoId string, title string) (string, error) {
-	_, stderr, err := utils.Shellout(fmt.Sprintf("yt-dlp -o '%s' -f %s -- %s ", title, file.getFormatId(), videoId))
+func Download(file YoutubeFile, videoId string, filename string) (string, error) {
+	downloadPath := config.GetConfig().App.FilesPath
+	targetPath := filepath.Join(downloadPath, filename)
+	l := fmt.Sprintf("yt-dlp -o '%s' -f %s -- %s ", targetPath, file.getFormatId(), videoId)
+	fmt.Println(l)
+	_, stderr, err := utils.Shellout(fmt.Sprintf("yt-dlp -o '%s' -f %s -- %s ", targetPath, file.getFormatId(), videoId))
 
 	if err != nil {
 		utils.Logger.Error(stderr)
